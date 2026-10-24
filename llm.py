@@ -10,7 +10,7 @@ client = OpenAI(
     api_key=os.environ['OPENROUTER_API_KEY'],
 )
 
-user_input = input("Enter your prompt>")
+user_input = input("Enter your prompt> ")
 
 SYSTEM_PROMPT = """
 You are a coding agent. Your job is to code.
