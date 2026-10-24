@@ -3,6 +3,8 @@ import sys
 
 from openai import OpenAI
 
+load_dotenv()
+
 client = OpenAI(
     base_url=os.environ['BASE_URL'],
     api_key=os.environ['OPENROUTER_API_KEY'],
@@ -15,7 +17,7 @@ You are a coding agent. Your job is to code.
 """
 
 response = client.chat.completions.create(
-    model='',
+    model='deepseek/deepseek-v4.1-flash-1017',
     messages=[
         {'role': 'system', 'content': SYSTEM_PROMPT},
         {'role': 'user', 'content': user_input}
