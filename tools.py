@@ -50,3 +50,8 @@ TOOL_SCHEMAS = [
     },
 
 ]
+
+TOOLS = {
+    'bash': bash,
+    'read_file': read_file,
+}
