@@ -32,3 +32,5 @@ while True:
             'tool_call_id': tool_call.id,
             'content': result,
         })
+
+    print(usage)
