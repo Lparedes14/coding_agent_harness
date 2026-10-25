@@ -1,6 +1,8 @@
 import os
 import sys
 
+from dotenv import load_dotenv
+
 from openai import OpenAI
 
 from tools import TOOL_SCHEMAS
@@ -12,6 +14,10 @@ client = OpenAI(
     api_key=os.environ['OPENROUTER_API_KEY'],
 )
 
+SYSTEM_PROMPT = """
+You are a coding assistant.
+"""
+
 def call_llm(messages):
     response = client.chat.completions.create(
         model='deepseek/deepseek-v4.1-flash-1017',
@@ -19,11 +25,11 @@ def call_llm(messages):
         tools=TOOL_SCHEMAS
     )
 
-    output = response.choices[0].message.content
+    message = response.choices[0].message
 
     usage = {
         'prompt_tokens': response.usage.prompt_tokens,
         'completion_tokens': response.usage.completion_tokens,
     }
 
-    return output, usage
+    return message, usage
