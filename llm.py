@@ -20,7 +20,7 @@ You are a coding assistant.
 
 def call_llm(messages):
     response = client.chat.completions.create(
-        model='deepseek/deepseek-v4.1-flash-1017',
+        model=os.environ['MODEL'],
         messages=messages,
         tools=TOOL_SCHEMAS
     )
