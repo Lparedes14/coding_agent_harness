@@ -3,34 +3,42 @@ import json
 from llm import SYSTEM_PROMPT, call_llm
 from tools import TOOLS
 
-user_input = input("Enter your prompt> ")
 
-messages = [
-    {'role': 'system', 'content': SYSTEM_PROMPT},
-    {'role': 'user', 'content': user_input}
-]
+try:
+    # Conversation loop (continue until Ctrl+C)
+    while True:
+        user_input = input("Enter your prompt> ")
 
-while True:
-    message, usage = call_llm(messages)
-    messages.append(message.model_dump(exclude_none=True))
+        messages = [
+            {'role': 'system', 'content': SYSTEM_PROMPT},
+            {'role': 'user', 'content': user_input}
+        ]
 
-    if message.content:
-        print("\nAgent: ", message.content, "\n")
+        # Agent loop (runs until current request is finished)
+        while True:
+            message, usage = call_llm(messages)
+            messages.append(message.model_dump(exclude_none=True))
 
-    if not message.tool_calls:
-        break
+            if message.content:
+                print("\nAgent: ", message.content, "\n")
 
-    for tool_call in message.tool_calls:
-        args = json.loads(tool_call.function.arguments)
-        result = TOOLS[tool_call.function.name](**args)
+            if not message.tool_calls:
+                break
 
-        print("Tool: ", tool_call.function.name, args)
-        print(result, "\n")
+            for tool_call in message.tool_calls:
+                args = json.loads(tool_call.function.arguments)
+                result = TOOLS[tool_call.function.name](**args)
 
-        messages.append({
-            'role': 'tool',
-            'tool_call_id': tool_call.id,
-            'content': result,
-        })
+                print("Tool: ", tool_call.function.name, args)
+                print(result, "\n")
 
-    print(usage)
+                messages.append({
+                    'role': 'tool',
+                    'tool_call_id': tool_call.id,
+                    'content': result,
+                })
+
+            print(usage)
+
+except KeyboardInterrupt:
+    print("\nExiting")
