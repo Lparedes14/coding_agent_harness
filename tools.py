@@ -16,6 +16,9 @@ def write_file(file_path: str, content: str) -> str:
     return f"Wrote {file_path}"
 
 def edit_file(file_path: str, old_str: str, new_str: str, allow_multi_edit=False):
+    if not old_str:
+        return "Error: `old_str` cannot be empty"
+
     with open(file_path) as f:
         content = f.read()
 
