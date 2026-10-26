@@ -63,7 +63,7 @@ def compact_history(messages):
     return True
 
 
-def run_agent(messages, show=True):
+def run_agent(messages, show=True, on_event=None):
     total_usage = {
         'prompt_tokens': 0,
         'completion_tokens': 0,
@@ -87,6 +87,9 @@ def run_agent(messages, show=True):
         if message.content:
             last_content = message.content
 
+            if on_event:
+                on_event('assistant', {'content': message.content})
+
             if show:
                 print(f"\nAgent:\n{message.content}\n")
 
@@ -95,6 +98,7 @@ def run_agent(messages, show=True):
         for tool_call in message.tool_calls or []:
             name = tool_call.function.name
             raw_args = tool_call.function.arguments or '{}'
+            args = {}
 
             if show:
                 preview = ' '.join(raw_args.split())
@@ -136,6 +140,13 @@ def run_agent(messages, show=True):
                     f"{result[-keep:]}"
                 )
 
+            if on_event:
+                on_event('tool', {
+                    'name': name,
+                    'args': args,
+                    'result': result,
+                })
+
             if show:
                 lines = result.splitlines() or ['(no output)']
                 displayed = lines[:MAX_DISPLAY_LINES]
@@ -157,12 +168,27 @@ def run_agent(messages, show=True):
         # Compact only after all tool calls have matching tool results.
         if should_compact(usage):
             try:
+                before = len(messages)
                 compact_history(messages)
+
+                if on_event:
+                    on_event('compacted', {
+                        'before': before,
+                        'after': len(messages),
+                    })
 
                 if show:
                     print("[Conversation compacted]\n")
 
             except Exception as error:
+                if on_event:
+                    on_event('note', {
+                        'content': (
+                            f"Compaction skipped: "
+                            f"{type(error).__name__}: {error}"
+                        ),
+                    })
+
                 if show:
                     print(
                         f"[Compaction skipped: "
@@ -174,6 +200,11 @@ def run_agent(messages, show=True):
 
     if show:
         print(f"Agent stopped after {MAX_STEPS} steps.")
+
+    if on_event:
+        on_event('note', {
+            'content': f"Agent stopped after {MAX_STEPS} steps.",
+        })
 
     return last_content, total_usage
 
