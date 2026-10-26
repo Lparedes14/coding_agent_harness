@@ -13,6 +13,7 @@ client = OpenAI(
     api_key=os.environ['OPENROUTER_API_KEY'],
 )
 
+# TODO: MAKE MORE ROBUST SYSTEM PROMPT
 SYSTEM_PROMPT = """
 You are a coding assistant.
 """

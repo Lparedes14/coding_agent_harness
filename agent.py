@@ -1,7 +1,12 @@
 import json
 
 from llm import SYSTEM_PROMPT, call_llm
-from tools import TOOLS
+from tools import TOOLS, TOOL_SCHEMAS
+from skills import READ_SKILL_SCHEMA, list_skills, read_skill
+
+
+TOOLS['read_skill'] = read_skill
+TOOL_SCHEMAS.append(READ_SKILL_SCHEMA)
 
 
 try:
