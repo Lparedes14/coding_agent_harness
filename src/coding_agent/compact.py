@@ -1,7 +1,6 @@
 import json
-import os
 
-from llm import call_llm
+from .llm import call_llm
 
 
 COMPACT_AT = 30_000
@@ -46,6 +45,7 @@ Be concise, but do not omit details needed to continue the task.
 def should_compact(usage):
     return usage.get('prompt_tokens', 0) >= COMPACT_AT
 
+
 def compact(messages):
     if not messages:
         return messages
@@ -61,9 +61,16 @@ def compact(messages):
             {'role': 'system', 'content': COMPACTION_PROMPT},
             {'role': 'user', 'content': transcript},
         ],
-        tools=None
+        tools=None,
     )
 
     return [
-        {'role': 'user', 'content': 'The earlier conversation was compacted into the following working context. Use it as context and continue from the recorded state.\n\n' + summary_message.content}
+        {
+            'role': 'user',
+            'content': (
+                'The earlier conversation was compacted into the following '
+                'working context. Use it as context and continue from the '
+                f'recorded state.\n\n{summary_message.content}'
+            ),
+        }
     ]
