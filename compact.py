@@ -56,10 +56,13 @@ def compact(messages):
         indent=2,
     )
 
-    summary_message, _ = call_llm([
-        {'role': 'system', 'content': COMPACTION_PROMPT},
-        {'role': 'user', 'content': transcript},
-    ])
+    summary_message, _ = call_llm(
+        [
+            {'role': 'system', 'content': COMPACTION_PROMPT},
+            {'role': 'user', 'content': transcript},
+        ],
+        tools=None
+    )
 
     return [
         {'role': 'user', 'content': 'The earlier conversation was compacted into the following working context. Use it as context and continue from the recorded state.\n\n' + summary_message.content}
