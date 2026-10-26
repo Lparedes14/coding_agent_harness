@@ -3,6 +3,9 @@ import os
 
 from llm import call_llm
 
+
+COMPACT_AT = 30_000
+
 COMPACTION_PROMPT = """
 Summarize the coding-agent conversation so work can continue without the
 original transcript.
