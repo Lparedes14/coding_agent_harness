@@ -9,12 +9,10 @@ requires-python = ">=3.10"
 dependencies = [
     "openai==3.37.0",
     "python-dotenv==1.2.4",
-    "textual==8.2.8",
 ]
 
 [project.scripts]
 coding-agent = "coding_agent.agent:main"
-coding-agent-ui = "coding_agent.ui:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

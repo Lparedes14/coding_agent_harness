@@ -44,26 +44,9 @@ Be concise, but do not omit details needed to continue the task.
 
 
 def should_compact(usage):
-    return usage.get('prompt_tokens', 0) >= COMPACT_AT
+    # TODO(WORKSHOP 2)
+    ...
 
 def compact(messages):
-    if not messages:
-        return messages
-
-    transcript = json.dumps(
-        messages,
-        ensure_ascii=False,
-        indent=2,
-    )
-
-    summary_message, _ = call_llm(
-        [
-            {'role': 'system', 'content': COMPACTION_PROMPT},
-            {'role': 'user', 'content': transcript},
-        ],
-        tools=None
-    )
-
-    return [
-        {'role': 'user', 'content': 'The earlier conversation was compacted into the following working context. Use it as context and continue from the recorded state.\n\n' + summary_message.content}
-    ]
+    # TODO(WORKSHOP 2)
+    ...

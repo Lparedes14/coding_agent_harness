@@ -1,41 +1,20 @@
 import subprocess
 
 def bash(command: str) -> str:
-    result = subprocess.run(
-        command, shell=True, capture_output=True, text=True, timeout=60
-    )
-    
-    output = result.stdout + result.stderr
-
-    if result.returncode != 0:
-        return f"Exit code {result.returncode}\n{output or 'No output'}"
-    return output or 'No output'
+    # Code
+    pass
 
 def read_file(file_path: str) -> str:
-    with open(file_path) as f:
-        return f.read()
+    # Code
+    pass
 
 def write_file(file_path: str, content: str) -> str:
-    with open(file_path, 'w') as f:
-        f.write(content)
-    return f"Wrote {file_path}"
+    # Code
+    pass
 
 def edit_file(file_path: str, old_str: str, new_str: str, allow_multi_edit=False):
-    if not old_str:
-        return "Error: `old_str` cannot be empty"
-
-    with open(file_path) as f:
-        content = f.read()
-
-    count = content.count(old_str)
-    if count == 0:
-        return f"Error: `old_str` was not found in {file_path}"
-    if count > 1 and not allow_multi_edit:
-        return f"Error: `old_str` matches {count} times in {file_path}"
-    
-    with open(file_path, 'w') as f:
-        f.write(content.replace(old_str, new_str))
-    return f"Replaced {count} match(es) in {file_path}"
+    # Code
+    pass
 
 MARKS = {'pending': '[ ]', 'in_progress': '[~]', 'done': '[X]'}
 TODOS = []

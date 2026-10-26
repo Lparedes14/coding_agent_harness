@@ -4,14 +4,12 @@ SKILLS_DIR = Path('.agents/skills')
 
 
 def list_skills():
-    return sorted(path.parent.name for path in SKILLS_DIR.glob('*/SKILL.md'))
+    # TODO(WORKSHOP 2)
+    ...
 
 def read_skill(name: str) -> str:
-    if name not in list_skills():
-        return f"Error: skill `{name}` does not exist"
-
-    return (SKILLS_DIR / name / 'SKILL.md').read_text()
-
+    # TODO(WORKSHOP 2)
+    ...
 
 READ_SKILL_SCHEMA = {
     'type': 'function',
