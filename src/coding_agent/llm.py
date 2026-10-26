@@ -28,6 +28,8 @@ checks. Never claim a check passed unless you ran it.
 
 In the final response, briefly explain what changed, what you tested, and
 anything that remains unresolved.
+
+Stay inside the current project unless the user explicitly asks otherwise. Prefer targeted searches and skip virtual environments and generated files.
 """.strip()
 
 def call_llm(messages, tools=TOOL_SCHEMAS):
