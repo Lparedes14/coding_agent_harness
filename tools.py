@@ -138,7 +138,7 @@ TOOL_SCHEMAS = [
         },
     },
 
-    "type": "function",
+    {"type": "function",
     "function": {
         "name": "write_todos",
         "description": (
@@ -172,6 +172,7 @@ TOOL_SCHEMAS = [
             },
             "required": ["todos"],
         },
+    },
     },
 ]
 
