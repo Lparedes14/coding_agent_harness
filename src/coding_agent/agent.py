@@ -1,6 +1,7 @@
 import json
 import os
 
+from . import llm
 from .compact import compact, should_compact
 from .llm import SYSTEM_PROMPT, call_llm
 from .skills import READ_SKILL_SCHEMA, list_skills, read_skill
@@ -210,6 +211,7 @@ def main():
                 {'role': 'system', 'content': build_system_prompt()},
             ]
             TODOS.clear()
+            llm.CONVERSATION_COST = 0.0
             print("Started a new conversation.")
             continue
 
@@ -270,12 +272,18 @@ def main():
         })
 
         try:
+            starting_cost = llm.CONVERSATION_COST
             _, usage = run_agent(messages)
+            turn_cost = llm.CONVERSATION_COST - starting_cost
 
             print(
                 "Tokens: "
                 f"{usage['prompt_tokens']:,} prompt + "
                 f"{usage['completion_tokens']:,} completion"
+            )
+            print(
+                f"Cost: ${turn_cost:.6f} this turn · "
+                f"${llm.CONVERSATION_COST:.6f} conversation"
             )
 
         except KeyboardInterrupt:

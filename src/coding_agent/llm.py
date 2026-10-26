@@ -13,6 +13,8 @@ client = OpenAI(
     api_key=os.environ['OPENROUTER_API_KEY'],
 )
 
+CONVERSATION_COST = 0.0
+
 SYSTEM_PROMPT = """
 You are a coding agent working in the current directory.
 
@@ -33,9 +35,12 @@ Stay inside the current project unless the user explicitly asks otherwise. Prefe
 """.strip()
 
 def call_llm(messages, tools=TOOL_SCHEMAS):
+    global CONVERSATION_COST
+
     request = {
         'model': os.environ['MODEL'],
         'messages': messages,
+        'extra_body': {'usage': {'include': True}},
     }
 
     if tools:
@@ -46,6 +51,9 @@ def call_llm(messages, tools=TOOL_SCHEMAS):
     message = response.choices[0].message
 
     cost = getattr(response.usage, 'cost', None)
+
+    if cost is not None:
+        CONVERSATION_COST += float(cost)
 
     usage = {
         'prompt_tokens': response.usage.prompt_tokens,
