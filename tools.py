@@ -29,6 +29,19 @@ def edit_file(file_path: str, old_str: str, new_str: str, allow_multi_edit=False
         f.write(content.replace(old_str, new_str))
     return f"Replaced {count} match(es) in {file_path}"
 
+MARKS = {'pending': '[ ]', 'in_progress': '[~]', 'done': '[X]'}
+TODOS = []
+def write_todos(todos):
+    active = [todo for todo in todos if todo['status'] == 'in_progress']
+    if len(active) > 1:
+        return f"Error: {len(active)} tasks are in_progress"
+    
+    TODOS[:] = todos
+    return '\n'.join(
+        f"{MARKS[todo['status']]} {todo['content']}" for todo in TODOS
+    ) or "Todo list cleared"
+
+
 
 TOOL_SCHEMAS = [
     {
@@ -124,11 +137,48 @@ TOOL_SCHEMAS = [
             },
         },
     },
+
+    "type": "function",
+    "function": {
+        "name": "write_todos",
+        "description": (
+            "Record the plan for a multi-step task. Send the whole list every "
+            "time. Keep exactly one task in_progress and update it as you go."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "todos": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "content": {
+                                "type": "string",
+                                "description": "The task, imperative: 'Fix the parser'",
+                            },
+                            "activeForm": {
+                                "type": "string",
+                                "description": "Present continuous: 'Fixing the parser'",
+                            },
+                            "status": {
+                                "type": "string",
+                                "enum": ["pending", "in_progress", "done"],
+                            },
+                        },
+                        "required": ["content", "activeForm", "status"],
+                    },
+                }
+            },
+            "required": ["todos"],
+        },
+    },
 ]
 
 TOOLS = {
     'bash': bash,
     'read_file': read_file,
     'write_file': write_file,
-    'edit_file': edit_file
+    'edit_file': edit_file,
+    'write_todos': write_todos,
 }
