@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
-from tools import TOOL_SCHEMAS
+from .tools import TOOL_SCHEMAS
 
 
 load_dotenv()
@@ -13,10 +13,22 @@ client = OpenAI(
     api_key=os.environ['OPENROUTER_API_KEY'],
 )
 
-# TODO: MAKE MORE ROBUST SYSTEM PROMPT
 SYSTEM_PROMPT = """
-You are a coding assistant.
-"""
+You are a coding agent working in the current directory.
+
+Use the available tools to inspect the project before making changes. Keep
+working until the user's request is complete.
+
+For multi-step tasks, use write_todos and keep the plan updated. If an
+available skill matches the task, read it before acting. Use task for focused,
+read-only codebase exploration.
+
+Prefer small, targeted edits. After changing code, run the relevant tests or
+checks. Never claim a check passed unless you ran it.
+
+In the final response, briefly explain what changed, what you tested, and
+anything that remains unresolved.
+""".strip()
 
 def call_llm(messages, tools=TOOL_SCHEMAS):
     request = {

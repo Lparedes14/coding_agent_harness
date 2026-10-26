@@ -1,7 +1,7 @@
 import json
 import os
 
-from llm import call_llm
+from .llm import call_llm
 
 
 COMPACT_AT = 30_000

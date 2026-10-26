@@ -1,13 +1,13 @@
 import json
 import os
 
-from compact import compact, should_compact
-from llm import SYSTEM_PROMPT, call_llm
-from skills import READ_SKILL_SCHEMA, list_skills, read_skill
-from subagent import TASK_SCHEMA, task
-from tools import MARKS, TODOS
-from tools import TOOL_SCHEMAS as BASE_TOOL_SCHEMAS
-from tools import TOOLS as BASE_TOOLS
+from .compact import compact, should_compact
+from .llm import SYSTEM_PROMPT, call_llm
+from .skills import READ_SKILL_SCHEMA, list_skills, read_skill
+from .subagent import TASK_SCHEMA, task
+from .tools import MARKS, TODOS
+from .tools import TOOL_SCHEMAS as BASE_TOOL_SCHEMAS
+from .tools import TOOLS as BASE_TOOLS
 
 
 MAX_STEPS = 50

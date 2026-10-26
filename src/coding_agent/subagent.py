@@ -1,8 +1,8 @@
 import json
 import os
 
-from llm import call_llm
-from tools import TOOL_SCHEMAS, TOOLS
+from .llm import call_llm
+from .tools import TOOL_SCHEMAS, TOOLS
 
 
 MAX_STEPS = 12

@@ -1,5 +1,0 @@
-openai==3.37.0
-python-dotenv==1.2.4
-
-[dev]
-pytest<10,>=8
