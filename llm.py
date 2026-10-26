@@ -1,11 +1,10 @@
 import os
-import sys
 
 from dotenv import load_dotenv
-
 from openai import OpenAI
 
 from tools import TOOL_SCHEMAS
+
 
 load_dotenv()
 
@@ -18,12 +17,16 @@ SYSTEM_PROMPT = """
 You are a coding assistant.
 """
 
-def call_llm(messages):
-    response = client.chat.completions.create(
-        model=os.environ['MODEL'],
-        messages=messages,
-        tools=TOOL_SCHEMAS
-    )
+def call_llm(messages, tools=TOOL_SCHEMAS):
+    request = {
+        'model': os.environ['MODEL'],
+        'messages': messages,
+    }
+
+    if tools:
+        request['tools'] = tools
+
+    response = client.chat.completions.create(**request)
 
     message = response.choices[0].message
 
