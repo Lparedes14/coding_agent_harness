@@ -4,7 +4,12 @@ def bash(command: str) -> str:
     result = subprocess.run(
         command, shell=True, capture_output=True, text=True, timeout=60
     )
-    return (result.stdout + result.stderr) or "No Output"
+    
+    output = result.stdout + result.stderr
+
+    if result.returncode != 0:
+        return f"Exit code {result.returncode}\n{output or 'No output'}"
+    return output or 'No output'
 
 def read_file(file_path: str) -> str:
     with open(file_path) as f:
