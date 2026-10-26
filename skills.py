@@ -11,3 +11,22 @@ def read_skill(name: str) -> str:
         return f"Error: skill `{name}` does not exist"
 
     return (SKILLS_DIR / name / 'SKILL.md').read_text()
+
+
+READ_SKILL_SCHEMA = {
+    'type': 'function',
+    'function': {
+        'name': 'read_skill',
+        'description': 'Read the complete instructions for an available skill.',
+        'parameters': {
+            'type': 'object',
+            'properties': {
+                'name': {
+                    'type': 'string',
+                    'description': 'The name of the skill to load',
+                },
+            },
+            'required': ['name'],
+        },
+    },
+}
