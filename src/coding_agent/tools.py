@@ -1,35 +1,19 @@
 import subprocess
 
-
 def bash(command: str) -> str:
     result = subprocess.run(
         command, shell=True, capture_output=True, text=True, timeout=60
     )
-
-    if result.stdout and result.stderr:
-        separator = '' if result.stdout.endswith(('\n', '\r')) else '\n'
-        output = result.stdout + separator + result.stderr
-    else:
-        output = result.stdout or result.stderr
-
-    output = output.rstrip('\r\n')
-
-    if result.returncode:
-        return f"Exit code {result.returncode}\n{output or 'No output'}"
-
-    return output or "No output"
-
+    return (result.stdout + result.stderr) or "No Output"
 
 def read_file(file_path: str) -> str:
     with open(file_path) as f:
         return f.read()
 
-
 def write_file(file_path: str, content: str) -> str:
     with open(file_path, 'w') as f:
         f.write(content)
     return f"Wrote {file_path}"
-
 
 def edit_file(file_path: str, old_str: str, new_str: str, allow_multi_edit=False):
     if not old_str:
@@ -43,25 +27,24 @@ def edit_file(file_path: str, old_str: str, new_str: str, allow_multi_edit=False
         return f"Error: `old_str` was not found in {file_path}"
     if count > 1 and not allow_multi_edit:
         return f"Error: `old_str` matches {count} times in {file_path}"
-
+    
     with open(file_path, 'w') as f:
         f.write(content.replace(old_str, new_str))
     return f"Replaced {count} match(es) in {file_path}"
 
-
 MARKS = {'pending': '[ ]', 'in_progress': '[~]', 'done': '[X]'}
 TODOS = []
-
-
 def write_todos(todos):
     active = [todo for todo in todos if todo['status'] == 'in_progress']
     if len(active) > 1:
         return f"Error: {len(active)} tasks are in_progress"
-
+    
     TODOS[:] = todos
     return '\n'.join(
         f"{MARKS[todo['status']]} {todo['content']}" for todo in TODOS
     ) or "Todo list cleared"
+
+
 
 TOOL_SCHEMAS = [
     {

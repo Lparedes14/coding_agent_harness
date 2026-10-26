@@ -1,1 +1,0 @@
-# Guild Coding Agent

@@ -1,27 +1,14 @@
 import json
 import os
 
-from .llm import call_llm
-from .tools import TOOL_SCHEMAS, TOOLS
+from llm import call_llm
+from tools import TOOL_SCHEMAS, TOOLS
 
 
 MAX_STEPS = 12
 MAX_TOOL_OUTPUT = 20_000
 
-SUBAGENT_TOOLS = {
-    name: TOOLS[name]
-    for name in ('bash', 'read_file')
-}
-
-SUBAGENT_TOOL_SCHEMAS = [
-    schema
-    for schema in TOOL_SCHEMAS
-    if schema['function']['name'] in SUBAGENT_TOOLS
-]
-
-
-def task(description: str) -> str:
-    system_prompt = f"""
+SUBAGENT_PROMPT = f"""
 You are a focused codebase exploration subagent.
 
 You were given one self-contained question by a lead coding agent. You cannot
@@ -43,8 +30,21 @@ Rules:
 - Do not try to create another subagent.
 """.strip()
 
+SUBAGENT_TOOLS = {
+    name: TOOLS[name]
+    for name in ('bash', 'read_file')
+}
+
+SUBAGENT_TOOL_SCHEMAS = [
+    schema
+    for schema in TOOL_SCHEMAS
+    if schema['function']['name'] in SUBAGENT_TOOLS
+]
+
+
+def task(description: str) -> str:
     messages = [
-        {'role': 'system', 'content': system_prompt},
+        {'role': 'system', 'content': SUBAGENT_PROMPT},
         {'role': 'user', 'content': description},
     ]
 
