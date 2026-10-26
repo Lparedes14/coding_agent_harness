@@ -1,13 +1,8 @@
 # INIT AI Guild Coding Agent
 
-A small, understandable coding-agent harness built for the INIT AI Guild
-workshops. It can inspect a codebase, make a plan, edit files, run commands,
-load task-specific skills, delegate focused research to a subagent, and compact
-long conversations.
-
-The project intentionally keeps those moving parts visible. It is a teaching
-project—not a production sandbox or a replacement for a full coding-agent
-platform.
+A small, minimalist coding harness built to inspect codebases, make a plan,
+edit files, load task-specific skills, delegate focused research to a subagent,
+and compact long conversations.
 
 ![INIT AI Guild Coding Agent terminal interface](docs/guild-agent-ui.svg)
 
@@ -69,10 +64,21 @@ python -m coding_agent
 python -m coding_agent.ui
 ```
 
-The agent works in the directory from which you launch it. For example, after
-installing this package, you can move into another project and run
-`coding-agent-ui` there. Skills are also discovered from that working
-directory, so launch it from this repository root to use the included skills.
+## Use the Agent on Another Project
+
+From this repository, create a folder for your project and start the agent:
+
+```bash
+mkdir -p projects/my-project
+coding-agent-ui
+```
+
+Then ask it to work inside that folder:
+
+```text
+Build a small project inside projects/my-project. Only modify files inside
+that folder.
+```
 
 ## Try a coding task
 
