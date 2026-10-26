@@ -45,9 +45,12 @@ def call_llm(messages, tools=TOOL_SCHEMAS):
 
     message = response.choices[0].message
 
+    cost = getattr(response.usage, 'cost', None)
+
     usage = {
         'prompt_tokens': response.usage.prompt_tokens,
         'completion_tokens': response.usage.completion_tokens,
+        'cost': float(cost) if cost is not None else None,
     }
 
     return message, usage
