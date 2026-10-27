@@ -27,16 +27,75 @@ def run_agent(messages, show=True, on_event=None):
 
     for _ in range(MAX_STEPS):
         # CODE: call the LLM
+        message, usage = call_llm(
+            messages,
+            tools=TOOL_SCHEMAS
+        )
+
+        total_usage['prompt_tokens'] += (
+            usage.get('prompt_tokens', 0) or 0
+        )
+        total_usage['completion_tokens'] += (
+            usage.get('completion_tokens', 0) or 0
+        )
 
         # CODE: record and display response
 
+        messages.append(
+            message.model_dump(exclude_none=True)
+        )
+
+        if message.content:
+            print(f"\nAgent:\n{message.content}\n")
+
         # CODE: stop if there are no tool calls
+        if not message.tool_calls:
+            return message.content or '', total_usage
 
         # CODE: execute every requested tool
+        for tool_call in message.tool_calls:
+            name = tool_call.function.name
+            raw_args = (
+                tool_call.function.arguments or '{}'
+            )
 
-        # CODE: append matching tool results
+            print(f"Tool {name} {raw_args}")
 
-        ...
+
+            try:
+                args = json.loads(raw_args)
+
+                if not isinstance(args, dict):
+                    raise ValueError("Tool args must be JSON")
+
+                tool = TOOLS.get(name)
+
+                if tool is None:
+                    raise ValueError(f"Unknown tool `{name}`")
+
+                result = tool(**args)
+
+                if not isinstance(result, str):
+                    result = json.dumps(
+                        result,
+                        ensure_ascii=False,
+                        default=str
+                    )
+
+            except Exception as error:
+                result = (
+                    f"Error: {type(error).__name__}: {error}"
+                )
+
+            print(result)
+
+            messages.append({
+                'role': 'tool',
+                'tool_call_id': tool_call.id,
+                'content': result,
+            })
+
+    print(f"Agent stopped after {MAX_STEPS} steps.")
 
     return '', total_usage
 
