@@ -115,10 +115,17 @@ to quit, and `Escape` to focus the prompt.
 Skills are small Markdown files that give the agent focused instructions for a
 particular kind of work. This repository includes:
 
+- `api-design`
 - `code-review`
+- `codebase-exploration`
 - `debugging`
 - `documentation`
 - `frontend`
+- `git-workflow`
+- `performance`
+- `planning`
+- `refactoring`
+- `security-review`
 - `testing`
 
 Each skill lives at `.agents/skills/<name>/SKILL.md`. To add one, create a new

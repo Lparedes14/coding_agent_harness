@@ -1,3 +1,8 @@
+---
+name: testing
+description: Add, repair, and verify tests using the repository's existing conventions.
+---
+
 # Testing
 
 Use this skill when adding tests, repairing failing tests, or verifying a completed implementation.

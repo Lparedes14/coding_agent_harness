@@ -1,3 +1,8 @@
+---
+name: frontend
+description: Build or refine a user interface that fits the product and preserves existing behavior.
+---
+
 # Frontend
 
 Use this skill when creating or improving the user interface after the underlying functionality works.
